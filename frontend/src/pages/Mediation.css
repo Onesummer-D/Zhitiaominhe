@@ -1,0 +1,494 @@
+.mediation-page {
+  padding: 24px 32px;
+  background: #FAFBFD;
+  min-height: calc(100vh - 64px);
+}
+
+.mediation-layout {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ========== 左侧录入区 ========== */
+.input-panel {
+  width: 40%;
+  background: #fff;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  height: fit-content;
+}
+
+.panel-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2C7473;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #2C7473;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.form-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 14px;
+  color: #444;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #2C7473;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.type-row {
+  align-items: flex-end;
+}
+
+.type-group {
+  flex: 1;
+}
+
+.checkbox-group {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 8px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #444;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.checkbox-label input {
+  width: 16px;
+  height: 16px;
+  accent-color: #2C7473;
+  cursor: pointer;
+}
+
+.char-count {
+  text-align: right;
+  font-size: 12px;
+  color: #bbb;
+  margin-top: 4px;
+}
+
+.voice-placeholder {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  background: #fafbfc;
+  border-radius: 8px;
+  color: #999;
+  font-size: 13px;
+  margin-bottom: 16px;
+  border: 1px dashed #e0e0e0;
+}
+
+.quick-templates {
+  margin-bottom: 20px;
+}
+
+.quick-templates > label {
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.template-tag {
+  display: inline-block;
+  padding: 6px 14px;
+  margin: 0 8px 8px 0;
+  background: #fff;
+  color: #2C7473;
+  border: 1px solid #2C7473;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.template-tag:hover {
+  background: #2C7473;
+  color: #fff;
+}
+
+.analyze-btn {
+  width: 100%;
+  padding: 14px;
+  background: #2C7473;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.analyze-btn:hover:not(:disabled) {
+  background: #23605f;
+}
+
+.analyze-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* ========== 右侧面板 ========== */
+.result-panel {
+  width: 60%;
+  background: #fff;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  height: fit-content;
+}
+
+.result-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  color: #bbb;
+}
+
+.result-placeholder p {
+  font-size: 14px;
+  margin-top: 12px;
+}
+
+.result-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  color: #888;
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #eee;
+  border-top-color: #2C7473;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ========== 结果卡片通用 ========== */
+.result-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.card {
+  border: 1px solid #eee;
+  border-radius: 8px;
+  background: #fff;
+  overflow: hidden;
+}
+
+/* ========== 卡片1：AI调解建议 ========== */
+/* 统一左边距 24px，和左侧 panel-title 对齐 */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px 10px;
+}
+
+.card-title-black {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.confidence-pill {
+  padding: 4px 12px;
+  border-radius: 20px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.card-body {
+  padding: 0 24px 12px;
+}
+
+.suggestion-main {
+  font-size: 16px;
+  color: #333;
+  margin: 0 0 8px;
+  line-height: 1.6;
+}
+
+.highlight-green {
+  color: #2C7473;
+  font-weight: 600;
+}
+
+.card-divider {
+  height: 1px;
+  background: #eee;
+  margin: 0 24px;
+}
+
+/* ========== 相似案例 ========== */
+.similar-section {
+  padding: 10px 24px 16px;
+}
+
+.similar-label {
+  font-size: 13px;
+  color: #888;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.similar-case-row {
+  background: #F0FDF4;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 8px;
+}
+
+.similar-case-row:last-child {
+  margin-bottom: 0;
+}
+
+.similar-case-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.similar-case-name {
+  font-size: 14px;
+  color: #333;
+  font-weight: 500;
+}
+
+.similar-case-score {
+  font-size: 13px;
+  color: #04AF64;
+  font-weight: 600;
+}
+
+.similar-case-sub {
+  font-size: 12px;
+  color: #888;
+}
+
+.similar-empty {
+  font-size: 13px;
+  color: #999;
+  padding: 4px 0;
+}
+
+/* ========== 卡片2：习惯法提示（橙色背景） ========== */
+.card-orange {
+  background: #FFF5F0;
+  border: 1px solid #ffe0d0;
+  padding: 14px 24px;
+}
+
+.card-orange-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #A85A34;
+  margin-bottom: 8px;
+}
+
+.card-orange-body {
+  font-size: 14px;
+  color: #7C3A1D;
+  line-height: 1.6;
+}
+
+/* ========== 折叠卡片：法律依据 / 习惯法 ========== */
+/* 减小 padding 让卡片更窄 */
+.fold-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 24px;
+  cursor: pointer;
+  background: #fff;
+  transition: background 0.15s;
+}
+
+.fold-header:hover {
+  background: #fafbfc;
+}
+
+.fold-arrow {
+  font-size: 11px;
+  color: #666;
+  display: inline-block;
+  width: 14px;
+  text-align: center;
+}
+
+.fold-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+}
+
+.fold-body {
+  padding: 0 24px 14px 46px;
+}
+
+.law-row {
+  background: #F8F9FA;
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin-bottom: 8px;
+}
+
+.law-row:last-child {
+  margin-bottom: 0;
+}
+
+.law-row-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #2C7473;
+  margin-bottom: 4px;
+}
+
+.law-row-content {
+  font-size: 13px;
+  color: #555;
+  line-height: 1.5;
+}
+
+.custom-row {
+  background: #F8F9FA;
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin-bottom: 8px;
+}
+
+.custom-row:last-child {
+  margin-bottom: 0;
+}
+
+.custom-row-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #A85A34;
+  margin-bottom: 4px;
+}
+
+.custom-row-content {
+  font-size: 13px;
+  color: #555;
+  line-height: 1.5;
+}
+
+.fold-empty {
+  font-size: 13px;
+  color: #999;
+  padding: 4px 0;
+}
+
+/* ========== 操作按钮 2×2 ========== */
+.action-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.action-btn {
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  border: none;
+}
+
+.action-btn:hover {
+  opacity: 0.9;
+}
+
+.btn-primary {
+  background: #2C7473;
+  color: #fff;
+}
+
+.btn-secondary {
+  background: #A85A34;
+  color: #fff;
+}
+
+.btn-dark {
+  background: #1E3A5F;
+  color: #fff;
+}
+
+.btn-outline {
+  background: #fff;
+  color: #555;
+  border: 1px solid #ddd;
+}
+
+.btn-outline:hover {
+  background: #f8f8f8;
+  opacity: 1;
+}
