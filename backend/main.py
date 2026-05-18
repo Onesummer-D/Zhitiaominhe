@@ -10,6 +10,9 @@ from routers import analyze, cases, knowledge, stats
 
 app = FastAPI(title="智调民和 API", version="0.1.0")
 
+from routers import documents
+app.include_router(documents.router)
+
 # CORS
 app.add_middleware(
     CORSMiddleware,

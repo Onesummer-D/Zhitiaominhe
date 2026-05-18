@@ -11,7 +11,7 @@ def load_keywords():
 def keyword_match(text, category_hint=None):
     """
     双层级权重计分：核心定性词+3，特征词+1，排除词-2
-    返回：最高分类、分数、命中词详情
+    返回：最高一级分类、最高二级分类、分数、命中词详情
     """
     keywords_db = load_keywords()
     categories = keywords_db['categories']
@@ -23,6 +23,8 @@ def keyword_match(text, category_hint=None):
     best_category = None
     best_score = -999
     best_details = None
+    best_subcategory = None   # 新增：最佳二级分类
+    best_sub_score = -999     # 新增：最佳二级分类的独立分数
 
     # 遍历所有一级分类
     for primary_cat, subcategories in categories.items():
@@ -68,11 +70,16 @@ def keyword_match(text, category_hint=None):
                 core_words.extend(subcat_core)
                 feature_words.extend(subcat_features)
 
+                # 追踪独立分数最高的二级分类
+                if subcat_score > best_sub_score:
+                    best_sub_score = subcat_score
+                    best_subcategory = subcat_name
+
         # 去重
         core_words = list(dict.fromkeys(core_words))
         feature_words = list(dict.fromkeys(feature_words))
 
-        # 更新最佳分类
+        # 更新最佳一级分类
         if total_score > best_score:
             best_score = total_score
             best_category = primary_cat
@@ -93,6 +100,7 @@ def keyword_match(text, category_hint=None):
 
     return {
         'category': best_category,
+        'sub_category': best_subcategory or best_category,  # 优先返回二级分类
         'score': best_score,
         'confidence_level': confidence_level,
         'keywords': best_details
