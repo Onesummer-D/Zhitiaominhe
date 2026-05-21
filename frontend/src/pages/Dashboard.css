@@ -17,7 +17,7 @@
 }
 
 .welcome-section p {
-  font-size: 15px;
+  font-size: 16px;
   color: #666;
   margin: 0;
 }
@@ -73,14 +73,14 @@
 }
 
 .action-title {
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 600;
   color: #1a1a1a;
   margin-bottom: 4px;
 }
 
 .action-desc {
-  font-size: 13px;
+  font-size: 14px;
   color: #888;
   line-height: 1.4;
 }
@@ -102,13 +102,13 @@
 .stats-section {
   background: #fff;
   border-radius: 10px;
-  padding: 20px 24px;
+  padding: 24px;
   box-shadow: 0 1px 4px rgba(0,0,0,0.06);
   border: 1px solid #f0f0f0;
 }
 
 .stats-section h3 {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
   color: #1a1a1a;
   margin: 0 0 16px 0;
@@ -122,7 +122,7 @@
 .stat-card {
   flex: 1;
   text-align: center;
-  padding: 16px 8px;
+  padding: 20px 12px;
   background: #fafbfc;
   border-radius: 8px;
 }
@@ -134,7 +134,7 @@
 }
 
 .stat-label {
-  font-size: 13px;
+  font-size: 14px;
   color: #888;
 }
 
@@ -142,13 +142,13 @@
 .news-section {
   background: #fff;
   border-radius: 10px;
-  padding: 20px 24px;
+  padding: 24px;
   box-shadow: 0 1px 4px rgba(0,0,0,0.06);
   border: 1px solid #f0f0f0;
 }
 
 .news-section h3 {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
   color: #1a1a1a;
   margin: 0 0 16px 0;
@@ -192,7 +192,7 @@
 }
 
 .news-title {
-  font-size: 14px;
+  font-size: 15px;
   color: #444;
   line-height: 1.4;
 }
@@ -201,14 +201,14 @@
 .pending-section {
   background: #fff;
   border-radius: 10px;
-  padding: 20px 24px;
+  padding: 24px;
   box-shadow: 0 1px 4px rgba(0,0,0,0.06);
   border: 1px solid #f0f0f0;
-  min-height: 400px;
+  flex: 1;
 }
 
 .pending-section h3 {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
   color: #1a1a1a;
   margin: 0 0 16px 0;
@@ -240,13 +240,13 @@
 }
 
 .pending-title {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: #333;
 }
 
 .pending-status {
-  font-size: 12px;
+  font-size: 13px;
   padding: 3px 10px;
   border-radius: 12px;
   font-weight: 600;
@@ -275,7 +275,7 @@
 .pending-meta {
   display: flex;
   gap: 12px;
-  font-size: 12px;
+  font-size: 13px;
   color: #999;
 }
 
@@ -291,4 +291,15 @@
   padding: 40px;
   color: #999;
   font-size: 14px;
+}
+
+/* ========== 新增：内容区居中约束（与智能调解页保持一致） ========== */
+.dashboard-layout {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.right-column {
+  display: flex;
+  flex-direction: column;
 }

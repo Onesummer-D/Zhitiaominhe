@@ -1,0 +1,17 @@
+.knowledge-page {
+  padding: 24px 32px;
+  background: #FAFBFD;
+  min-height: calc(100vh - 64px);
+}
+
+.knowledge-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.knowledge-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 24px 0;
+}

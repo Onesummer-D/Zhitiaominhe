@@ -31,7 +31,7 @@ CATEGORY_SCENE_KEYWORDS = {
     "婚姻家庭": ["婚姻", "彩礼", "聘礼", "婚礼", "嫁娶", "婚约", "离婚", "感情", "分居", "抚养", "家暴", "暴力", "赡养", "继承", "家庭", "调解"],
     "土地山林": ["宅基地", "地基", "房屋", "建房", "草场", "草原", "牧场", "放牧", "林地", "山林", "林木", "砍树", "地界", "边界", "田埂", "征地", "征收", "承包", "流转", "越界", "权属"],
     "债务劳资": ["工资", "欠薪", "劳务", "报酬", "农民工", "工程款", "借款", "欠款", "债务", "借贷", "赊购", "还钱", "受伤", "赔偿", "医疗费", "伤残", "工伤"],
-    "邻里冲突": ["排水", "通风", "采光", "噪音", "通行", "相邻", "宅基地", "围墙", "过道"],
+    "邻里冲突": ["排水", "通风", "采光", "噪音", "通行", "相邻", "宅基地", "围墙", "过道", "邻里", "物业", "小区", "漏水", "扰民", "装修", "异味", "动物", "风俗", "诅咒", "撒米"],
     "彩礼纠纷": ["婚姻", "彩礼", "聘礼", "婚礼", "嫁娶", "婚约", "家庭", "调解"],
     "离婚纠纷": ["婚姻", "离婚", "感情", "分居", "抚养", "财产分割", "家庭"],
     "家暴纠纷": ["家暴", "暴力", "殴打", "虐待", "伤害", "人身安全"],
@@ -44,6 +44,17 @@ CATEGORY_SCENE_KEYWORDS = {
     "欠薪": ["工资", "欠薪", "劳务", "报酬", "农民工", "工程款"],
     "债务": ["借款", "欠款", "债务", "借贷", "赊购", "还钱"],
     "劳务受害": ["受伤", "赔偿", "医疗费", "伤残", "工伤", "劳务"],
+    # 邻里冲突子类场景词
+    "相邻排水": ["排水", "漏水", "渗水", "用水", "水渠", "沟渠", "水利", "灌溉", "积水", "污水", "邻里", "相邻"],
+    "相邻通行": ["通行", "道路", "通道", "走路", "过路", "运输", "必经", "邻里", "相邻"],
+    "噪音扰民": ["噪音", "噪声", "扰民", "装修", "音响", "狗叫", "喧哗", "邻里", "相邻"],
+    "相邻漏水": ["漏水", "渗水", "天花板", "墙壁", "管道", "防水", "邻里", "相邻", "物业"],
+    "采光妨碍": ["采光", "日照", "阳光", "挡光", "遮阳", "建筑", "邻里", "相邻"],
+    "异味污染": ["异味", "臭味", "油烟", "鸡粪", "臭气", "养殖", "排放", "邻里", "相邻"],
+    "动物损害": ["动物", "宠物", "狗", "羊", "牲畜", "咬死", "啃食", "邻里", "相邻"],
+    "树木越界": ["树木", "树枝", "树根", "竹子", "越界", "修剪", "邻里", "相邻"],
+    "侵占房屋": ["侵占", "占用", "堆放", "杂物", "房屋", "空房", "邻里", "相邻"],
+    "风俗侵权": ["风俗", "民俗", "习惯", "诅咒", "撒米", "精神损害", "邻里", "相邻"],
 }
 
 def get_primary_category(sub_category):
@@ -62,7 +73,7 @@ def get_primary_category(sub_category):
         return "土地山林"
     if any(x in sc for x in ["欠薪", "工资", "债务", "劳资", "劳务", "赔偿", "工伤", "借款", "欠款"]):
         return "债务劳资"
-    if any(x in sc for x in ["邻里", "相邻", "排水", "通行", "采光", "噪音"]):
+    if any(x in sc for x in ["邻里", "相邻", "排水", "通行", "采光", "噪音", "漏水", "异味", "动物", "侵占", "风俗", "树木"]):
         return "邻里冲突"
     return sub_category
 
@@ -80,16 +91,27 @@ def detect_custom_law_conflict(text, custom_law_flag=False, category_hint=""):
     conflicts = []
     matched_laws = []
 
+    def _extract_ethnicity_from_text(t):
+        ethnic_keywords = ["藏族", "彝族", "苗族", "回族", "维吾尔族", "蒙古族", "壮族", "傣族", "土家族", "哈尼族", "哈萨克族", "侗族", "瑶族", "羌族", "纳西族", "门巴族", "珞巴族", "撒拉族"]
+        for e in ethnic_keywords:
+            if e in t:
+                return e
+        return None
+
     scene_keywords = get_scene_keywords(category_hint)
     primary = get_primary_category(category_hint)
 
     for law in custom_laws:
         match_keywords = set()
-        match_keywords.add(law.get('ethnicity', ''))
+        # === 修复：民族名不再加入初始 match_keywords，避免"壮族"匹配所有壮族习惯法 ===
+        # 原代码：match_keywords.add(law.get('ethnicity', ''))
+        # 现改为：民族名只在 custom_law_flag=True 且前面未匹配时作为兜底
 
         name = law.get('name', '')
-        for part in name.replace('制', '').replace('法', '').replace('（', ' ').replace('）', ' ').split():
-            if len(part) >= 2:
+        # 改进 name 拆分，支持 / + 、 等分隔符
+        name_clean = name.replace('制', ' ').replace('法', ' ').replace('（', ' ').replace('）', ' ').replace('/', ' ').replace('+', ' ').replace('、', ' ')
+        for part in name_clean.split():
+            if len(part) >= 2 and part not in ['调解', '制度', '规则', '法律', '习惯', '方法', '工作']:
                 match_keywords.add(part)
 
         for scene in law.get('applicable_scenarios', []):
@@ -103,10 +125,74 @@ def detect_custom_law_conflict(text, custom_law_flag=False, category_hint=""):
                 is_matched = True
                 break
 
+        # 特殊民族习惯法词汇直接匹配（解决"款首""咪谷""梯玛"等无法通过 name 拆分匹配的问题）
+        if not is_matched:
+            special_terms = {
+                '款约': ['款首', '款约', '侗款'],
+                '咪谷': ['咪谷', '最巴', '赶沟人', '欧嘎阿波'],
+                '梯玛': ['梯玛'],
+                '德古': ['德古'],
+                '部落长老': ['部落长老', '长老'],
+                '嘎查达': ['嘎查达'],
+                '都老': ['都老', '寨老'],
+                '阿訇': ['阿訇'],
+                '石牌': ['石牌', '石牌头人'],
+                '贝侬': ['贝侬'],
+                '石榴籽': ['石榴籽'],
+                '刻木分水': ['刻木分水', '刻木', '分水'],
+                '乡所共治': ['乡所共治'],
+                '团场': ['团场'],
+                '草原诚信': ['草原诚信'],
+                '部门联动': ['中心吹哨', '部门报到'],
+                '苏鲁克': ['苏鲁克'],
+                '烙印': ['烙印', '约孙'],
+                '神山': ['神山', '圣水'],
+                '贾理': ['贾理', '理老'],
+                '榔规': ['榔规', '议榔'],
+                '侗款': ['侗款', '款会', '埋岩'],
+                '赔命价': ['赔命价', '赔血价'],
+                '神判': ['神判'],
+                '共妻': ['共妻', '一妻多夫'],
+                '休妻': ['休妻'],
+                '转房': ['转房', '收继婚', '填房婚', '安明格尔'],
+                '不落夫家': ['不落夫家'],
+                '姑舅表': ['姑舅表', '阿舅则美该'],
+                '包办': ['包办', '红爷', '说亲', '定亲'],
+                '早婚': ['早婚'],
+                '塔拉克': ['塔拉克'],
+                '拴线': ['拴线', '泼水', '休书'],
+                '尼卡亥': ['尼卡亥'],
+                '你姜': ['你姜', '陪礼钱', '破竹断婚'],
+            }
+            for key, aliases in special_terms.items():
+                if key in name:
+                    for alias in aliases:
+                        if alias in text:
+                            is_matched = True
+                            break
+                    if is_matched:
+                        break
+
+        # === 修复：民族名匹配改为兜底逻辑，仅在 custom_law_flag=True 且前面未匹配时触发 ===
+        # 且要求该习惯法的 applicable_scenarios 与当前 category_hint 的大类相关
         if custom_law_flag and not is_matched:
             ethnicity = law.get('ethnicity', '')
             if ethnicity and ethnicity in text:
-                is_matched = True
+                # 增加约束：民族名单独匹配时，必须 applicable_scenarios 包含当前大类关键词
+                law_scenes = law.get('applicable_scenarios', [])
+                scene_relevant = False
+                for scene in law_scenes:
+                    if primary in scene or any(kw in scene for kw in scene_keywords):
+                        scene_relevant = True
+                        break
+                # 邻里冲突额外放宽：允许"邻里""相邻""家庭""纠纷"等场景
+                if not scene_relevant and primary == "邻里冲突":
+                    for scene in law_scenes:
+                        if any(x in scene for x in ["邻里", "相邻", "家庭", "纠纷", "矛盾", "用水", "通行", "土地", "边界"]):
+                            scene_relevant = True
+                            break
+                if scene_relevant:
+                    is_matched = True
 
         if is_matched and category_hint:
             law_scenes = law.get('applicable_scenarios', [])
@@ -123,6 +209,13 @@ def detect_custom_law_conflict(text, custom_law_flag=False, category_hint=""):
                         break
                 if scene_match:
                     break
+
+            # 邻里冲突大类放宽 scene_match
+            if not scene_match and primary == "邻里冲突":
+                for scene in law_scenes:
+                    if any(x in scene for x in ["邻里", "相邻", "家庭", "纠纷", "矛盾", "用水", "通行", "土地", "边界"]):
+                        scene_match = True
+                        break
 
             if scene_match and primary == "婚姻家庭":
                 exclude_scenes = ["森林", "林木", "草场", "放牧", "债务", "欠款", "借款", "欠薪", "工伤", "赔偿", "杀人", "伤害", "环保", "矿产", "水源"]
@@ -154,6 +247,12 @@ def detect_custom_law_conflict(text, custom_law_flag=False, category_hint=""):
                     'coordination_suggestion': law.get('coordination_suggestion', ''),
                     'validity_level': law.get('validity_level', '参考性')
                 })
+                
+    detected_ethnicity = _extract_ethnicity_from_text(text)
+    if detected_ethnicity:
+        # 如果文本明确提到了民族（如"哈尼族"），只保留该民族的习惯法
+        matched_laws = [law for law in matched_laws if law.get('ethnicity') == detected_ethnicity]
+        conflicts = [c for c in conflicts if c.get('ethnicity') == detected_ethnicity]
 
     return {
         'conflict_alert': len(conflicts) > 0,
@@ -236,7 +335,7 @@ def get_similar_cases(text, category, top_n=3):
 
         if case_category and case_primary != primary:
             continue
-        
+
         same_category_count += 1
 
         case_text = (case.get('description', '') + ' ' + case.get('title', '')).lower()
@@ -275,12 +374,12 @@ def get_similar_cases(text, category, top_n=3):
             })
 
     scored_cases.sort(key=lambda x: x['similarity'], reverse=True)
-    
+
     if scored_cases:
         print(f"[get_similar_cases] 匹配到 {len(scored_cases)} 条案例，最高相似度: {scored_cases[0]['similarity']}%，目标分类: {primary}")
     else:
         print(f"[get_similar_cases] 未匹配到案例。目标分类: {primary}，同分类案例数: {same_category_count}")
-    
+
     return scored_cases[:top_n]
 
 if __name__ == '__main__':
