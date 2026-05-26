@@ -1,6 +1,17 @@
+<div align="center">
+
 # 智调民和 —— 民族地区基层纠纷智能调解与法律适配系统
 
-> 面向少数民族边疆地区的通用基层纠纷智能调解平台。通过"规则引擎 + DeepSeek大模型语义兜底"双引擎融合，实现纠纷智能识别、习惯法冲突检测、法律文书一键生成与案件全生命周期管理。
+**面向少数民族边疆地区的通用基层纠纷智能调解平台**
+
+通过"规则引擎 + DeepSeek大模型语义兜底"双引擎融合，实现纠纷智能识别、习惯法冲突检测、法律文书一键生成与案件全生命周期管理
+
+[![React](https://img.shields.io/badge/React-18-61DAFB?logo=react)](https://react.dev/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.110-009688?logo=fastapi)](https://fastapi.tiangolo.com/)
+[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python)](https://www.python.org/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+
+</div>
 
 ---
 
@@ -133,4 +144,4 @@ QingMiao/
 
 ## 许可证
 
-MIT License
+[MIT License](./LICENSE)
