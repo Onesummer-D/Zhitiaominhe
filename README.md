@@ -31,6 +31,30 @@
 
 ---
 
+## 系统展示
+
+### 工作台
+
+<img src="./Assets/dashboard.png" width="850">
+
+
+### 智能调解：纠纷分析与文书生成
+
+<img src="./Assets/mediation1.png" width="850">
+
+<img src="./Assets/mediation2.png" width="850">
+
+
+### 案件管理
+
+<img src="./Assets/case_management.png" width="850">
+
+<img src="./Assets/case_management1.png" width="850">
+
+<img src="./Assets/case_management2.png" width="850">
+
+---
+
 ## 核心功能
 
 | 功能模块 | 技术方案 |
